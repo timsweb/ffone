@@ -11,6 +11,7 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
     ),
 ));
 
+//http://silex.sensiolabs.org/doc/providers/security.html <-- read this and come back to it. 
 $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     'security.firewalls' => [
         'unsecured' => [

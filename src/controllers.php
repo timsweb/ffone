@@ -7,8 +7,10 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 
+$app['indexController'] = new Fone\Controller\Index();
+
 $app->get('/', function () use ($app) {
-    return $app['twig']->render('index.html', array());
+    return $app['indexController']->homepage($app);
 })
 ->bind('homepage')
 ;

@@ -3,19 +3,19 @@ namespace Fone\Controller;
 
 use Silex\Application;
 
-class Index implements AbstractController
+class Index extends AbstractController
 {
 
     public function homepage(Application $app)
     {
         $db = $app['db']; /*@var $db \Doctrine\DBAL\Connection*/
         //get next round
-        return $app['twig']->render('index.html', array());
+        return $app['twig']->render('index.twig', array());
     }
 
     public function login(Applcation $app)
     {
-        //handl login form
+        //handle login
     }
 
     public function logout(Application $app)
