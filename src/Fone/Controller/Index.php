@@ -1,7 +1,7 @@
 <?php
 namespace Fone\Controller;
 
-use Silex\Application;
+use Fone\Application;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -35,6 +35,17 @@ class Index extends AbstractController
          */
     }
 
+    public function changePassword(Request $request, Application $app)
+    {
+        if ('POST' == $request->getMethod()) {
+           //
+           return $app->redirect($app->path('change_password'));
+        }
+        return $app['twig']->render('password_reset.twig', [
+	        'error'         => $app['security.last_error']($request),
+	        'last_username' => $app['session']->get('_security.last_username')]);
+    }
+
     public function logout(Application $app)
     {
         return "logout";
@@ -49,4 +60,6 @@ class Index extends AbstractController
     {
         return "results";
     }
+
+
 }

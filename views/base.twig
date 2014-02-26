@@ -73,7 +73,7 @@
           <a class="brand" href="/">Fantasy F1</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              {% if user and user.is_authenticated %}
+              {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 <li{% if nav_highlight == 'leaderboard' %} class='active'{% endif %}><a href="">League</a></li>
                 <li{% if nav_highlight == 'results' %} class='active'{% endif %}><a href="">Results</a></li>
                 <li{% if nav_highlight == 'rules' %} class='active'{% endif %}><a href="">Rules</a></li>
@@ -81,8 +81,8 @@
             </ul>
             <ul class="nav pull-right">
               <li>
-                {% if user and user.is_authenticated %}
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> {{ user.name }} <b class="caret"></b></a>
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> {{ app.security.getToken().getUser().getUsername() }} <b class="caret"></b></a>
                   <ul class="dropdown-menu">
                     <li class=""><a href="">My Team</a></li>
                     <li class=""><a href="">Change Password</a></li>
@@ -90,7 +90,7 @@
                     <li class=""><a href="">Logout</a></li>
                   </ul>
                 {% else %}
-                  <a href=""><i class="icon-user icon-white"></i> Login <b class="caret"></b></a>
+                  <a href="{{ path('login')}}"><i class="icon-user icon-white"></i> Login <b class="caret"></b></a>
                 {% endif %}
               </li>
             </ul>

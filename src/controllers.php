@@ -23,8 +23,12 @@ $app->match('login', function(Request $request) use ($app) {
 })->method('GET|POST')->bind('login');
 
 $app->get('/logout', function() use ($app) {
-    return $app['indexController']->logout($app);
+    //return $app['indexController']->logout($app);
 })->bind('logout');
+
+$app->match('/change_password', function(Request $request) use ($app) {
+    return $app['indexController']->changePassword($request, $app);
+})->method('GET|POST')->bind('change_password');
 
 $app->post('/login_check', function() use ($app) {
     return false;

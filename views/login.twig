@@ -14,12 +14,25 @@
             <form action="{{ path('login_check') }}" method="post" id="login-form">
                 <fieldset>
                     <legend>Login</legend>
-                    <input name="username" type="text" placeholder="username" value="{{ last_username }}"/>
-                    <input name="password" type="password" />
+                    <div class="clearfix">
+                        <label for="id_username">Username</label>
+                        <div class="controls ">
+                            <input id="id_name" name="username" type="text" placeholder="username" value="{{ last_username }}"/>
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
+                    <div class="clearfix">
+                        <label for="id_password">Password</label>
+                        <div class="controls ">
+                            <input type="password" name="password" id="id_password">
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
                     <div class="actions">
                         <input type="submit" class="btn btn-primary" value="Log in">
                     </div>
                 </fieldset>
+                <fieldset>
             </form>
             <script type="text/javascript">
                 $(function(){
