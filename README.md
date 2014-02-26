@@ -3,6 +3,18 @@ ffone
 
 Small private fantasy motorsport league. Writen for use with my friends. Currently a work in progress.  
 
+Developers
+----------
+Anyone kind enough to help me develop this will need [Composer](http://getcomposer.org) and then install the dependencies located in composer.json.
+
+1. Download and install Composer:
+
+        curl -s http://getcomposer.org/installer | php
+
+2. Install your dependencies:
+
+        php composer.phar install
+
 Costs
 -----
 The costs of drivers, like last year will be based off of the betting odds of winning the championship. 
