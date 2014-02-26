@@ -1,0 +1,35 @@
+{% extends "base.twig" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <div class="well">
+        <div class="content">
+            {% if error %}
+                <div class="alert alert-block fade in">
+                    <a class="close" data-dismiss="alert" href="#">×</a>
+                    <p><strong>Uh oh!</strong>{{ error}}</p>
+                </div>
+            {% endif %}
+            <form action="{{ path('login_check') }}" method="post" id="login-form">
+                <fieldset>
+                    <legend>Login</legend>
+                    <input name="username" type="text" placeholder="username" value="{{ last_username }}"/>
+                    <input name="password" type="password" />
+                    <div class="actions">
+                        <input type="submit" class="btn btn-primary" value="Log in">
+                    </div>
+                </fieldset>
+            </form>
+            <script type="text/javascript">
+                $(function(){
+                    $(".alert-message").alert();
+                    $('#mainForm').submit(function(){
+                        $('#submit').button('loading');
+                    })
+                });
+                document.forms[1].elements[2].focus();
+            </script>
+        </div>
+    </div>
+{% endblock %}

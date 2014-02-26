@@ -3,7 +3,9 @@
        "silex/silex": "~1.1",
        "doctrine/dbal": "2.2.*",
        "symfony/security": "~2.3",
-       "symfony/twig-bridge": "~2.3"
+       "symfony/twig-bridge": "~2.3",
+       "symfony/console": "~2.3",
+       "ircmaxell/password-compat": "1.0.3"
     },
     "autoload": {
         "psr-0": { "": "src/" }

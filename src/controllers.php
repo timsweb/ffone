@@ -14,6 +14,22 @@ $app->get('/', function () use ($app) {
 })
 ->bind('homepage')
 ;
+$app->get('/results', function() use ($app) {
+    return $app['indexController']->results($app);
+})->bind('results');
+
+$app->match('login', function(Request $request) use ($app) {
+    return $app['indexController']->login($request, $app);
+})->method('GET|POST')->bind('login');
+
+$app->get('/logout', function() use ($app) {
+    return $app['indexController']->logout($app);
+})->bind('logout');
+
+$app->post('/login_check', function() use ($app) {
+    return false;
+})->bind('login_check');
+
 
 $app->error(function (\Exception $e, $code) {
         switch ($code) {
