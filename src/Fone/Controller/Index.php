@@ -37,13 +37,28 @@ class Index extends AbstractController
 
     public function changePassword(Request $request, Application $app)
     {
+        $error = null;
         if ('POST' == $request->getMethod()) {
-           //
-           return $app->redirect($app->path('change_password'));
+            $user = $app->user();
+            if ($request->request->get('newPassword') === $request->request->get('confirmPassword')) {
+                $newPassword = $app->encodePassword($user, $request->request->get('newPassword'));
+                $encoder = $app['security.encoder_factory']->getEncoder($user); /*@var $encoder \Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder*/
+                if ($encoder->isPasswordValid($user->getPassword(), $request->request->get('currentPassword'), null)) {
+                    $db = $this->_getDb($app);
+                    $db->update('users', ['password' => $newPassword], ['id' => $user->getId()]);
+                    $app['session']->getFlashBag()->add('message', 'Password updated');
+                    return $app->redirect($app->path('change_password'));
+                } else {
+                    $app['session']->getFlashBag()->add('message', 'Wrong password.');
+                }
+            } else {
+                $app['session']->getFlashBag()->add('message', 'Paswords don\'t match.');
+            }
+            return $app->redirect($app->path('change_password'));
         }
         return $app['twig']->render('password_reset.twig', [
-	        'error'         => $app['security.last_error']($request),
-	        'last_username' => $app['session']->get('_security.last_username')]);
+            'error' => $error,
+	]);
     }
 
     public function logout(Application $app)
@@ -60,6 +75,4 @@ class Index extends AbstractController
     {
         return "results";
     }
-
-
 }

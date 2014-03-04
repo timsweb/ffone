@@ -50,4 +50,17 @@ class User implements \Symfony\Component\Security\Core\User\UserInterface
         return $this->username;
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+
+
 }
