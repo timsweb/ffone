@@ -8,7 +8,6 @@ use Symfony\Component\Console\Input\InputOption;
 
 $console = new Application('Fone Fantasy Legaue Admin', 'n/a');
 
-
 $console
     ->register('import-calendar')
     ->setDefinition(array(

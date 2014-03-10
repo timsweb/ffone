@@ -11,8 +11,15 @@ class Client extends \Betfair\Client
     {
         $response = $this->getEvents(27107413); //F1 eventId
         $events =[];
-        foreach ($response->Result->eventItems as $event) {
-            $events[$event->eventId] = $event->eventName;
+        if (isset($response->Result->eventItems->BFEvent) && is_array($response->Result->eventItems->BFEvent)) {
+            $responseEvents = $response->Result->eventItems->BFEvent;
+        } else {
+            $responseEvents = [$response->Result->eventItems->BFEvent];
+        }
+        foreach ($responseEvents as $event) {
+            if (stripos($event->eventName, 'GP') !== false) {
+                $events[$event->eventId] = $event->eventName;
+            }
         }
         return $events;
     }
@@ -55,6 +62,9 @@ class Client extends \Betfair\Client
             die('<pre>' . print_r([$marketId, $response], true) . '</pre>');/** @todo DEBUGGING */
         }
         foreach ($response->Result->market->runners->Runner as $r) {
+            if (trim($r->name) === 'Any Other Driver') {
+                continue;
+            }
             $runners[$r->selectionId] = $r->name;
         }
         return $runners;
