@@ -16,11 +16,11 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), [
                 'password_parameter' => 'password'
             ],
             'users' => $app->share(function () use ($app) {
-                return new \Fone\UserProvider($app['db']);
+                return new \Fone\Mapper\User($app['db'], 'users', '\Fone\Model\User');
             }),
             'logout' => [
                 'logout_path' => '/logout',
-                'invalidate_session' => false //this workaround for php < 5.4.11 in Symfony seems to do NOTHING! 
+                'invalidate_session' => false //this workaround for php < 5.4.11 in Symfony seems to do NOTHING!
             ],
         ],
     ],

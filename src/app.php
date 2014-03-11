@@ -37,6 +37,16 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
     ),
 ));
 
+$mappers = ['Driver' => 'drivers', 'Round' => 'rounds', 'Team' => 'teams', 'User' => 'users', 'UserTeam' => 'userTeams'];
+foreach ($mappers as $mapper => $tableName) {
+    $diKey = lcfirst($mapper) . 'Mapper';
+    $app[$diKey] = $app->share(function() use ($app, $mapper, $tableName) {
+        $class = '\Fone\Mapper\\' . $mapper;
+        $model = '\Fone\Model\\' . $mapper;
+        return new $class($app['db'], $tableName, $model);
+    });
+}
+
 $app->register(new Silex\Provider\FormServiceProvider());
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 $app->register(new Silex\Provider\SessionServiceProvider());

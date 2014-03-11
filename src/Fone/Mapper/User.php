@@ -1,34 +1,36 @@
 <?php
-namespace Fone;
+namespace Fone\Mapper;
+use Fone\Model\User as UserModel;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Doctrine\DBAL\Connection;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
-class UserProvider implements UserProviderInterface
+class User extends AbstractMapper implements UserProviderInterface
 {
-    protected $_connection;
-
-    public function __construct(Connection $conn)
-    {
-        $this->_connection = $conn;
-    }
 
     public function loadUserByUsername($username)
     {
-        $stmt = $this->_connection->executeQuery('SELECT * FROM users WHERE name = ?', array(strtolower($username)));
+        $user = $this->get(['name' => $username]);
 
-        if (!$user = $stmt->fetch()) {
+        if (!$user) {
             throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
         }
+        return $user;
+    }
 
-        return new User($user['id'], $user['name'], $user['password'], ['ROLE_USER'], true, true, true, true);
+    protected function _hydrate($row)
+    {
+        $model = parent::_hydrate($row);
+        if ($model) {
+            $model->setRoles(['ROLE_USER']);
+        }
+        return parent::_hydrate($row);
     }
 
     public function refreshUser(UserInterface $user)
     {
-        if (!$user instanceof User) {
+        if (!$user instanceof UserModel) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
         }
 
@@ -37,6 +39,6 @@ class UserProvider implements UserProviderInterface
 
     public function supportsClass($class)
     {
-        return $class instanceof User;
+        return $class instanceof UserModel;
     }
 }
