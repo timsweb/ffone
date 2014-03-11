@@ -10,7 +10,6 @@ class Index extends AbstractController
 
     public function homepage(Application $app)
     {
-        $db = $app['db']; /*@var $db \Doctrine\DBAL\Connection*/
         $nextRound = $app['roundMapper']->getNextRound();
         return $app['twig']->render('index.twig', array('next_round' => $nextRound));
     }

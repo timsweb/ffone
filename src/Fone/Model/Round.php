@@ -2,9 +2,6 @@
 
 namespace Fone\Model;
 
-/**
- *
- */
 class Round extends AbstractModel
 {
 
