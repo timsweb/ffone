@@ -65,9 +65,12 @@ class Index extends AbstractController
         return "logout";
     }
 
-    public function myteam(Application $app)
+    public function myteam(Request $request, Application $app)
     {
-        return "results";
+        $nextRound = $app['roundMapper']->getNextRound(time() + 86400);
+        $drivers = $app['driverMapper']->fetchAll();
+        $teams = $app['teamMapper']->fetchAll();
+        //TODO: handle save and render page.
     }
 
     public function results(Application $app)

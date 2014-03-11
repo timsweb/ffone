@@ -37,7 +37,7 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
     ),
 ));
 
-$mappers = ['Driver' => 'drivers', 'Round' => 'rounds', 'Team' => 'teams', 'User' => 'users', 'UserTeam' => 'userTeams'];
+$mappers = ['Driver' => 'drivers', 'Round' => 'rounds', 'Team' => 'teams', 'User' => 'users', 'UserTeam' => 'userTeams', 'RoundResult' => 'roundResults'];
 foreach ($mappers as $mapper => $tableName) {
     $diKey = lcfirst($mapper) . 'Mapper';
     $app[$diKey] = $app->share(function() use ($app, $mapper, $tableName) {
