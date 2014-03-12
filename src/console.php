@@ -90,6 +90,18 @@ $console->register('create-user')
        $output->writeln('done');
     });
 
+$console->register('reset-password')
+    ->setDefinition(array(
+        new InputOption('username', 'u', InputOption::VALUE_REQUIRED, 'name'),
+        new InputOption('password', 'p', InputOption::VALUE_REQUIRED, 'password'),
+    ))
+    ->setDescription('create a user for the fantasy f1l.')
+    ->setCode(function (InputInterface $input, OutputInterface $output) use ($app) {
+       $db        = $app['db']; /* @var $db \Doctrine\DBAL\Connection */
+       $db->update('users', ['password' => password_hash($input->getOption('password'), PASSWORD_BCRYPT)], ['name' => $input->getOption('username')]);
+       $output->writeln('Password is: ' . $input->getOption('password'));
+    });
+
 $console->register('bet-getevent')
     ->setDefinition(array(
         new InputOption('eventId', null, InputOption::VALUE_OPTIONAL, 'parentEventId'),

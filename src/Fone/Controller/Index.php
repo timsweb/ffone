@@ -45,7 +45,7 @@ class Index extends AbstractController
                 if ($encoder->isPasswordValid($user->getPassword(), $request->request->get('currentPassword'), null)) {
                     $db = $this->_getDb($app);
                     $db->update('users', ['password' => $newPassword], ['id' => $user->getId()]);
-                    $app['session']->getFlashBag()->add('message', 'Password updated');
+                    $app['session']->getFlashBag()->add('success', 'Password updated');
                     return $app->redirect($app->path('change_password'));
                 } else {
                     $app['session']->getFlashBag()->add('message', 'Wrong password.');
