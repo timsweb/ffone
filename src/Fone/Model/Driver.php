@@ -4,7 +4,7 @@ namespace Fone\Model;
 /**
  *
  */
-class Driver
+class Driver extends AbstractModel
 {
 
     public function getCode()
@@ -49,5 +49,10 @@ class Driver
     {
         $this->_set('cost', $cost);
         return $this;
+    }
+
+    public function getTeamModel()
+    {
+        return $this->getReference('team');
     }
 }

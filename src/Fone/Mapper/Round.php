@@ -9,7 +9,7 @@ class Round extends AbstractMapper
     /**
      * @return \Fone\Model\Round
      */
-    public function getNextRound($asOf)
+    public function getNextRound($asOf = null)
     {
         if (!$asOf) {
             $asOf = time();

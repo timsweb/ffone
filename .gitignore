@@ -2,3 +2,4 @@ composer.lock
 composer.phar
 vendor/
 etc/config.ini
+fone.db

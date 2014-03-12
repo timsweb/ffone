@@ -62,4 +62,8 @@ class User extends AbstractModel implements \Symfony\Component\Security\Core\Use
         return $this->getname();
     }
 
+    public function getCurrentTeam()
+    {
+        return $this->getReference('currentTeam');
+    }
 }

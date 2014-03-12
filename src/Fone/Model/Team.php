@@ -4,7 +4,7 @@ namespace Fone\Model;
 /**
  *
  */
-class Team
+class Team extends AbstractModel
 {
 
     public function getCode()
@@ -38,5 +38,10 @@ class Team
     {
         $this->_set('cost', $cost);
         return $this;
+    }
+
+    public function getDrivers()
+    {
+        return $this->getReference('driver');
     }
 }

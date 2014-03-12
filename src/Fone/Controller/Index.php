@@ -70,7 +70,45 @@ class Index extends AbstractController
         $nextRound = $app['roundMapper']->getNextRound(time() + 86400);
         $drivers = $app['driverMapper']->fetchAll();
         $teams = $app['teamMapper']->fetchAll();
-        //TODO: handle save and render page.
+        $currentTeam = $app['userTeamMapper']->getCurrentTeam($app->user()->getId());
+
+        if ('POST' == $request->getMethod()) {
+            //TODO: validate & save
+            $driverA = $app['driverMapper']->get($request->request->get('driverA'));
+            $driverB = $app['driverMapper']->get($request->request->get('driverB'));
+            $teamA = $app['teamMapper']->get($request->request->get('teamA'));
+            $teamB = $app['teamMapper']->get($request->request->get('teamB'));
+            if ($driverA->getCode() == $driverB->getCode()) {
+                $app['session']->getFlashBag()->add('message', 'You can\'t have the same driver twice.');
+                return $app->redirect($app->path('my_team'));
+            }
+            if ($teamA->getCode() == $teamB->getCode()) {
+                $app['session']->getFlashBag()->add('message', 'You can\'t have the same team twice.');
+                return $app->redirect($app->path('my_team'));
+            }
+            if ($teamA->getCost() + $teamB->getCost() + $driverA->getCost() + $driverB->getCost() > 75) {
+                $app['session']->getFlashBag()->add('message', 'You\'re over budget.');
+                return $app->redirect($app->path('my_team'));
+            }
+            $userTeam = new \Fone\Model\UserTeam([
+                'driverA' => $driverA->getCode(),
+                'driverB' => $driverB->getCode(),
+                'teamA' => $teamA->getCode(),
+                'teamB' => $teamB->getCode(),
+                'effectiveFrom' => $nextRound->getId(),
+                'userId' => $app->user()->getId(),
+            ]);
+            $app['userTeamMapper']->save($userTeam);
+            $app['session']->getFlashBag()->add('success', 'Your team has been saved.');
+            return $app->redirect($app->path('my_team'));
+        }
+
+        return $app['twig']->render('my_team.twig', [
+            'current_team' => $currentTeam,
+            'all_drivers' => $drivers,
+            'all_teams' => $teams,
+            'next_round' => $nextRound
+	]);
     }
 
     public function results(Application $app)

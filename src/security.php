@@ -16,7 +16,7 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), [
                 'password_parameter' => 'password'
             ],
             'users' => $app->share(function () use ($app) {
-                return new \Fone\Mapper\User($app['db'], 'users', '\Fone\Model\User');
+                return $app['userMapper'];
             }),
             'logout' => [
                 'logout_path' => '/logout',

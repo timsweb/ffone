@@ -84,7 +84,7 @@
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> {{ app.security.getToken().getUser().getUsername() }} <b class="caret"></b></a>
                   <ul class="dropdown-menu">
-                    <li class=""><a href="">My Team</a></li>
+                    <li class=""><a href="{{ path('my_team') }}">My Team</a></li>
                     <li class=""><a href="{{ path('change_password') }}">Change Password</a></li>
                     <li class="divider"></li>
                     <li class=""><a href="{{ path('logout')}}">Logout</a></li>
@@ -100,11 +100,13 @@
     </div>
 
     <div id="messages">
-        {% for message in app.session.getFlashBag.get('message') %}
-          <div class="alert alert-{{message.tags}}">
-            <a class="close" data-dismiss="alert">×</a>
-            {{message}}
-          </div>
+        {% for type, messages in app.session.getFlashBag.all() %}
+            {% for message in messages %}
+                <div class="alert alert-{{type}}">
+                <a class="close" data-dismiss="alert">×</a>
+                {{message}}
+                </div>
+            {% endfor %}
         {% endfor %}
     </div>
 

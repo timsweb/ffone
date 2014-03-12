@@ -72,4 +72,24 @@ class UserTeam extends AbstractModel
         $this->_set('effectiveFrom', $effectiveFrom);
         return $this;
     }
+
+    public function getDriverAModel()
+    {
+        return $this->getReference('driverA');
+    }
+
+    public function getDriverBModel()
+    {
+        return $this->getReference('driverB');
+    }
+
+    public function getTeamAModel()
+    {
+        return $this->getReference('teamA');
+    }
+
+    public function getTeamBModel()
+    {
+        return $this->getReference('teamB');
+    }
 }

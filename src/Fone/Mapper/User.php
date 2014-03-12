@@ -25,7 +25,7 @@ class User extends AbstractMapper implements UserProviderInterface
         if ($model) {
             $model->setRoles(['ROLE_USER']);
         }
-        return parent::_hydrate($row);
+        return $model;
     }
 
     public function refreshUser(UserInterface $user)

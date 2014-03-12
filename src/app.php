@@ -43,7 +43,7 @@ foreach ($mappers as $mapper => $tableName) {
     $app[$diKey] = $app->share(function() use ($app, $mapper, $tableName) {
         $class = '\Fone\Mapper\\' . $mapper;
         $model = '\Fone\Model\\' . $mapper;
-        return new $class($app['db'], $tableName, $model);
+        return new $class($app, $app['db'], $tableName, $model);
     });
 }
 

@@ -126,7 +126,7 @@ $console->register('update-costs')
         }
 
         $teamOdds = $api->getCurrentTeamOdds();
-        $output->writeln('TEAMS');
+        $output->writeln(PHP_EOL . 'TEAMS');
         $output->writeln('=====');
         foreach($teamOdds as $t => $p) {
             $t = trim($t);
@@ -156,4 +156,13 @@ $console->register('load-data')
         }
         fclose($teamsFile);
     });
+
+$console->register('test')
+        ->setCode(function(InputInterface $input, OutputInterface $output) use ($app) {
+            $driverMapper = $app['driverMapper'];
+            $hamilton = $driverMapper->get('HAM');
+            $mercedes = $hamilton->getTeamModel();
+            $output->writeln('Team: ' . $mercedes->getName());
+    });
+
 return $console;

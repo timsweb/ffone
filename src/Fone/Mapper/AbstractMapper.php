@@ -4,6 +4,12 @@ namespace Fone\Mapper;
 
 abstract class AbstractMapper
 {
+    /**
+     *
+     * @var \Silex\Application
+     */
+    protected $_app;
+
     protected $_tableName;
 
     protected $_class;
@@ -13,12 +19,25 @@ abstract class AbstractMapper
      */
     protected $_db;
 
-    public function __construct(\Doctrine\DBAL\Connection $db, $table, $class)
+    public function __construct(\Silex\Application $app, \Doctrine\DBAL\Connection $db, $table, $class)
     {
+        $this->setApp($app);
         $this->setDb($db);
         $this->setTableName($table);
         $this->setClass($class);
     }
+
+    public function getApp()
+    {
+        return $this->_app;
+    }
+
+    public function setApp(\Silex\Application $app)
+    {
+        $this->_app = $app;
+        return $this;
+    }
+
 
     public function getTableName()
     {
@@ -118,6 +137,9 @@ abstract class AbstractMapper
 
     protected function _hydrate($row)
     {
+        if (!$row) {
+            return null;
+        }
         $class = $this->getClass();
         return new $class($row);
     }

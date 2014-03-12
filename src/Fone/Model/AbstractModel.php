@@ -18,6 +18,24 @@ abstract class AbstractModel
         $this->_data[$key] = $value;
     }
 
+    public function addReference($name, callable $callback)
+    {
+        $this->_references[$name] = $callback;
+        return $this;
+    }
+
+    public function getReference($name)
+    {
+        if (!isset($this->_references[$name])) {
+            return null;
+        }
+        //replace reference with returned value to act as a simple in memory cache
+        if (is_callable($this->_references[$name])) {
+            $this->_references[$name] = call_user_func($this->_references[$name], $this);
+        }
+        return $this->_references[$name];
+    }
+
     public function __construct(array $modelData)
     {
         foreach ($modelData as $key => $val) {

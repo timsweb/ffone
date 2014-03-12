@@ -34,6 +34,9 @@ $app->post('/login_check', function() use ($app) {
     return false;
 })->bind('login_check');
 
+$app->match('/my_team', function(Request $request) use ($app) {
+    return $app['indexController']->myteam($request, $app);
+})->method('GET|POST')->bind('my_team');
 
 $app->error(function (\Exception $e, $code) {
         switch ($code) {
