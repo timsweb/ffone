@@ -1,0 +1,73 @@
+{% extends "base.twig" %}
+
+{% block title %}Fantasy Racing Thingy{% endblock %}
+
+{% block content %}
+    <!-- Main hero unit -->
+    <div class="hero-unit">
+    {% if next_round %}
+    <h1>Hi!</h1>
+    <p class="f32"><span class="flag {{ next_round.countryCode|lower }}"></span>
+    The next race is the {{ next_round.name }}, {{next_round.racedate|date('d/m/Y') }}.</p>
+    <div class="row-fluid" id="countdown">
+        <div class="span6">
+            <div class="row-fluid">
+                <div class="span4 offset4 thumbnail countdown">
+                    <div id="cDownDays" class="countdownText">
+                       {dn}
+                    </div>
+                    <p>Days</p>
+                </div>
+                <div class="span4 thumbnail countdown">
+                    <div id="cDownHours" class="countdownText">
+                    {hn}
+                    </div>
+                    <p>Hours</p>
+                </div>
+            </div>
+        </div>
+        <div class="span6">
+            <div class="row-fluid">
+                <div class="span4 thumbnail countdown">
+                    <div id="cDownMinutes" class="countdownText">
+                    {mn}
+                    </div>
+                    <p>Minutes</p>
+                </div>
+                <div class="span4 thumbnail countdown">
+                    <div id="cDownSeconds" class="countdownText">
+                    {sn}
+                    </div>
+                    <p>Seconds</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <h1>That's it folks.</h1>
+    <p>Well that's it for 2014. Hope you enjoyed the season. Play again next year yeah?</p>
+    {% endif %}
+    </div>
+{% endblock %}
+
+{% block jquery_fwibble %}
+{% if next_round %}
+$('#counter').countdown({
+  image: 'static/images/digits.png',
+  startTime: '{{ starts_in }}'
+});
+{% endif %}
+{% endblock %}
+
+{% block jquery %}
+{% if next_round %}
+$('#countdown').countdown({until: new Date({{ next_round.racedate }} * 1000), compact: true,
+    layout: $('#countdown').html()});
+{% endif %}
+{% endblock %}
+
+{% block extrahead %}
+
+<script src="js/jquery.countdown.min.js" type="text/javascript"></script>
+<!-- <link href="static/css/countdown.css" rel="stylesheet">-->
+{% endblock %}

@@ -1,0 +1,6 @@
+betfair.username = USERNAME
+betfair.password = PASSWORD
+betfair.productId = 82
+betfair.vendorId = 0
+betfair.locationId = 0
+betfair.ipaddress = 0

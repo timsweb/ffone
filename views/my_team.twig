@@ -1,0 +1,145 @@
+{% extends "base.twig" %}
+{% block title %}My Team{% endblock %}
+
+{% block content %}
+    <!-- Main hero unit -->
+    <div class="well">
+    	<h2>Team Selection</h2>
+
+		    <div class="row-fluid">
+		    	<p>
+                            Here you can change your existing team lineup. The budget limit is <strong>£75M</strong>.
+		    	</p>
+		    	<p>You can change teams as many times as you like, but it will cost you 25 points!
+		    	Team changes will only be applied 24 hours before the start of the next race weekend, {{ next_round.name }}. You are free to change teams as many
+		    	times as you like until then.
+		    	</p>
+		    	{% if current_team %}
+		    	<table class="table span6">
+		    		<caption>Your current team</caption>
+		    		<tr>
+			    		<th>
+			    			Driver A
+			    		</th>
+			    		<td>
+                                                {{ current_team.driveraModel.name }} £{{ current_team.driveraModel.cost }}M
+			    		</td>
+			    		<th>
+			    			Team A
+			    		</th>
+			    		<td>
+			    			{{ current_team.teamaModel.name }} £{{ current_team.teamaModel.cost}}M
+			    		</td>
+			    	</tr>
+			    	<tr>
+			   	<th>
+			    			Driver B
+			    		</th>
+			    		<td>
+						{{ current_team.driverbModel.name }} £{{ current_team.driverbModel.cost }}M
+			    		</td>
+			    		<th>
+			    			Team B
+			    		</th>
+			    		<td>
+			    			{{ current_team.teambModel.name }} £{{ current_team.teambModel.cost}}M
+			    		</td>
+		    		</tr>
+		    	</table>
+		    	{% endif %}
+		    </div>
+        <div class="row-fluid">
+            <form id="myTeamForm" class="form-horizontal" method="post">
+                <div id="div_id_driverA" class="control-group">
+                    <label for="id_driverA" class="control-label requiredField">
+                        First Driver<span class="asteriskField">*</span>
+                    </label>
+                    <div class="controls">
+                        <select id="id_driverA" class="select" name="driverA">
+                            {% for driver in all_drivers %}
+                                <option value="{{ driver.code }}">{{ driver.name }} - £{{ driver.cost }}M</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div id="div_id_driverB" class="control-group">
+                    <label for="id_driverB" class="control-label requiredField">
+                        Second Driver<span class="asteriskField">*</span>
+                    </label>
+                    <div class="controls">
+                        <select id="id_driverB" class="select" name="driverB">
+                            {% for driver in all_drivers %}
+                                <option value="{{ driver.code }}">{{ driver.name }} - £{{ driver.cost }}M</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div id="div_id_teamA" class="control-group">
+                    <label for="id_teamA" class="control-label requiredField">
+                        First Team<span class="asteriskField">*</span>
+                    </label>
+                    <div class="controls">
+                        <select id="id_teamA" class="select" name="teamA">
+                            {% for team in all_teams %}
+                                <option value="{{ team.code }}">{{ team.name }} - £{{ team.cost }}M</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div id="div_id_teamB" class="control-group">
+                    <label for="id_teamB" class="control-label requiredField">
+                        Second Team<span class="asteriskField">*</span>
+                    </label>
+                    <div class="controls">
+                        <select id="id_teamB" class="select" name="teamB">
+                            {% for team in all_teams %}
+                                <option value="{{ team.code }}">{{ team.name }} - £{{ team.cost }}M</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <span class="control-label">Total:</span>
+                    <div class="controls" style="margin-top: 5px;">
+                        <span class="label label-important" id="cost_counter">£160M</span>
+                    </div>
+                </div>
+                <div class="controls">
+                    <input type="submit" name="submit" value="Submit" class="btn btn-primary button white" id="submit-id-submit">
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block jquery %}
+var driverCosts = {
+	{% for driver in all_drivers %}
+	{{ driver.code}}: {{ driver.cost}}{% if not forloop.last %},{% endif%}
+	{% endfor %}
+};
+var teamCosts = {
+	{% for team in all_teams %}
+	{{ team.code}}: {{ team.cost}}{% if not forloop.last %},{% endif%}
+	{% endfor %}
+};
+
+var updateCounter = function(evet) {
+	var driverA = driverCosts[$('#id_driverA').val()];
+	var driverB = driverCosts[$('#id_driverB').val()];
+	var teamA = teamCosts[$('#id_teamA').val()];
+	var teamB = teamCosts[$('#id_teamB').val()];
+	var counterElement = $('#cost_counter');
+	var totalCost = driverA + driverB + teamA + teamB;
+	if (totalCost > 75) {
+		counterElement.removeClass('label-info').addClass('label-important');
+	} else {
+		counterElement.removeClass('label-important').addClass('label-info');
+	}
+	counterElement.html('&pound;' + totalCost + 'M');
+}
+
+$('#myTeamForm select').change(updateCounter);
+
+updateCounter(undefined);
+{% endblock %}
