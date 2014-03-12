@@ -86,7 +86,7 @@ class Index extends AbstractController
                 $app['session']->getFlashBag()->add('message', 'You can\'t have the same team twice.');
                 return $app->redirect($app->path('my_team'));
             }
-            if ($teamA->getCost() + $teamB->getCost() + $driverA->getCost() + $driverB->getCost() > 75) {
+            if ($teamA->getCost() + $teamB->getCost() + $driverA->getCost() + $driverB->getCost() > 80) {
                 $app['session']->getFlashBag()->add('message', 'You\'re over budget.');
                 return $app->redirect($app->path('my_team'));
             }

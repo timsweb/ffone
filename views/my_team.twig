@@ -8,7 +8,7 @@
 
 		    <div class="row-fluid">
 		    	<p>
-                            Here you can change your existing team lineup. The budget limit is <strong>£75M</strong>.
+                            Here you can change your existing team lineup. The budget limit is <strong>£80M</strong>.
 		    	</p>
 		    	<p>You can change teams as many times as you like, but it will cost you 25 points!
 		    	Team changes will only be applied 24 hours before the start of the next race weekend, {{ next_round.name }}. You are free to change teams as many
@@ -131,7 +131,7 @@ var updateCounter = function(evet) {
 	var teamB = teamCosts[$('#id_teamB').val()];
 	var counterElement = $('#cost_counter');
 	var totalCost = driverA + driverB + teamA + teamB;
-	if (totalCost > 75) {
+	if (totalCost > 80) {
 		counterElement.removeClass('label-info').addClass('label-important');
 	} else {
 		counterElement.removeClass('label-important').addClass('label-info');

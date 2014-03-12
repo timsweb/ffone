@@ -121,7 +121,7 @@ $console->register('update-costs')
         $api = $app['bfClient']; /*@var $api \Fone\Betting\Client*/
         $api->logon();
         $driverCosts = [40, 39, 38, 37, 36, 33, 29, 28, 26, 25, 24, 22, 19, 16, 15, 14, 10, 9, 8, 7, 5, 3];
-        $teamCosts = [40, 38, 36, 32, 30, 22, 18, 14, 11, 9, 7];
+        $teamCosts = [40, 38, 36, 32, 30, 27, 23, 19, 16, 14, 12];
         $driverOdds = $api->getCurrentDriverOdds();
         $output->writeln('DRIVERS');
         $output->writeln('=======');
