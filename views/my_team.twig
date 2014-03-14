@@ -57,7 +57,7 @@
                     <div class="controls">
                         <select id="id_driverA" class="select" name="driverA">
                             {% for driver in all_drivers %}
-                                <option value="{{ driver.code }}">{{ driver.name }} - £{{ driver.cost }}M</option>
+                                <option value="{{ driver.code }}" {% if driver.code == current_team.driverA %}selected='selected'{% endif %}>{{ driver.name }} - £{{ driver.cost }}M</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -69,7 +69,7 @@
                     <div class="controls">
                         <select id="id_driverB" class="select" name="driverB">
                             {% for driver in all_drivers %}
-                                <option value="{{ driver.code }}">{{ driver.name }} - £{{ driver.cost }}M</option>
+                                <option value="{{ driver.code }}" {% if driver.code == current_team.driverB %}selected='selected'{% endif %}>{{ driver.name }} - £{{ driver.cost }}M</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -81,7 +81,7 @@
                     <div class="controls">
                         <select id="id_teamA" class="select" name="teamA">
                             {% for team in all_teams %}
-                                <option value="{{ team.code }}">{{ team.name }} - £{{ team.cost }}M</option>
+                                <option value="{{ team.code }}" {% if team.code == current_team.teamA %}selected='selected'{% endif %}>{{ team.name }} - £{{ team.cost }}M</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -93,7 +93,7 @@
                     <div class="controls">
                         <select id="id_teamB" class="select" name="teamB">
                             {% for team in all_teams %}
-                                <option value="{{ team.code }}">{{ team.name }} - £{{ team.cost }}M</option>
+                                <option value="{{ team.code }}" {% if team.code == current_team.teamB %}selected='selected'{% endif %}>{{ team.name }} - £{{ team.cost }}M</option>
                             {% endfor %}
                         </select>
                     </div>

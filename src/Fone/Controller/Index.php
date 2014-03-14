@@ -115,4 +115,18 @@ class Index extends AbstractController
     {
         return "results";
     }
+
+    public function rules(Application $app)
+    {
+        $scores = [];
+        for ($i = 1; $i < 22; $i++) {
+            $scores[$i] = [
+                'race' => \Fone\Model\RoundResult::getRaceScore($i),
+                'quali' => \Fone\Model\RoundResult::getQualiScore($i),
+            ];
+        }
+        return $app['twig']->render('rules.twig', [
+            'scores' => $scores
+        ]);
+    }
 }

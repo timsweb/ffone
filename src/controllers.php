@@ -14,9 +14,14 @@ $app->get('/', function () use ($app) {
 })
 ->bind('homepage')
 ;
+
 $app->get('/results', function() use ($app) {
     return $app['indexController']->results($app);
 })->bind('results');
+
+$app->get('/rules', function() use ($app) {
+    return $app['indexController']->rules($app);
+})->bind('rules');
 
 $app->match('login', function(Request $request) use ($app) {
     return $app['indexController']->login($request, $app);

@@ -1,0 +1,46 @@
+{% extends "base.twig" %}
+
+{% block title %}Rules{% endblock %}
+
+{% block content %}
+    <!-- Main hero unit -->
+    <div class="hero-unit">
+    <h1>Rules</h1>
+
+    <h2>Team Changes</h2>
+    <p>
+    	You may change teams as many times as you want. They'll be applied 24 hours before the race start, at which point the change will cost you 25 points, except the first selection.
+    </p>
+    <p>
+        From 24 hours before until 24 hours after team changes will be locked. This is to make sure the costs (which are calculated every 2 hours from betting odds) are up to date.
+    </p>
+
+    <h2>Scoring</h2>
+    <p>The race results will come from this <a href="http://ergast.com/mrd/">feed</a>. Team scores are calculated as the average of the driver scores for that team.
+    </p>
+    <p>
+    	Driver points are awarded as follows:
+    	<table class="table table-bordered">
+    		<tr>
+    			<th>Position</th>
+    			<th>Qualifying Score</th>
+    			<th>Race Score</th>
+    		</tr>
+    		{% for pos, scoring in scores %}
+    			<tr>
+                            <td>{{ pos }}</td>
+                            <td>{{ scoring.quali }}</td>
+                            <td>{{ scoring.race }}</td>
+    			</tr>
+    		{% endfor %}
+    	</table>
+    </p>
+
+    <p>
+    	The fastest lap nets you a bonus 10 points. Pole position and a win gets a bonus 15 points.
+    </p>
+	<p>
+		A point will also be awarded for each place gained by a driver throughout the race.
+	</p>
+    </div>
+{% endblock %}
