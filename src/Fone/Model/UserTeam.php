@@ -73,23 +73,46 @@ class UserTeam extends AbstractModel
         return $this;
     }
 
+    /**
+     * @return \Fone\Model\Driver
+     */
     public function getDriverAModel()
     {
         return $this->getReference('driverA');
     }
 
+    /**
+     *
+     * @return \Fone\Model\Driver
+     */
     public function getDriverBModel()
     {
         return $this->getReference('driverB');
     }
 
+    /**
+     *
+     * @return \Fone\Model\Team
+     */
     public function getTeamAModel()
     {
         return $this->getReference('teamA');
     }
 
+    /**
+     * @return \Fone\Model\Team
+     */
     public function getTeamBModel()
     {
         return $this->getReference('teamB');
+    }
+
+    public function getScoreForRound($roundId)
+    {
+        $total = $this->getDriverAModel()->getScoreForRound($roundId);
+        $total = $this->getDriverBModel()->getScoreForRound($roundId);
+        $total = $this->getTeamAModel()->getScoreForRound($roundId);
+        $total = $this->getTeamBModel()->getScoreForRound($roundId);
+        return $total;
     }
 }

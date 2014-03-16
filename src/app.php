@@ -37,7 +37,15 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
     ),
 ));
 
-$mappers = ['Driver' => 'drivers', 'Round' => 'rounds', 'Team' => 'teams', 'User' => 'users', 'UserTeam' => 'userTeams', 'RoundResult' => 'roundResults'];
+$mappers = [
+    'Driver' => 'drivers',
+    'Round' => 'rounds',
+    'Team' => 'teams',
+    'User' => 'users',
+    'UserTeam' => 'userTeams',
+    'RoundResult' => 'roundResults',
+    'UserScoreCache' => 'userScoreCache'
+];
 foreach ($mappers as $mapper => $tableName) {
     $diKey = lcfirst($mapper) . 'Mapper';
     $app[$diKey] = $app->share(function() use ($app, $mapper, $tableName) {
@@ -50,5 +58,19 @@ foreach ($mappers as $mapper => $tableName) {
 $app->register(new Silex\Provider\FormServiceProvider());
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 $app->register(new Silex\Provider\SessionServiceProvider());
+
+/* By default use sendmail to send emails (this
+ * isn't an email heavy app anyway). To use smtp
+ * a better config would be to use:
+ *
+ * $app->register(new Silex\Provider\SwiftmailerServiceProvider(), [
+ *   'swiftmailer.options' => $app['userConfig']['smtp']
+ * ]);
+ *
+ * and have the smtp settings in the etc/config.ini file, and so away with
+ * setting the transport.
+ */
+$app->register(new Silex\Provider\SwiftmailerServiceProvider());
+$app["swiftmailer.transport"] = new \Swift_Transport_MailTransport(new \Swift_Transport_SimpleMailInvoker(), $app['swiftmailer.transport.eventdispatcher']);
 
 return $app;

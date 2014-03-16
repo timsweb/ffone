@@ -42,6 +42,15 @@ class Team extends AbstractModel
 
     public function getDrivers()
     {
-        return $this->getReference('driver');
+        return $this->getReference('drivers');
+    }
+
+    public function getScoreForRound($roundId)
+    {
+        $total = 0;
+        foreach ($this->getDrivers() as $driver) {
+            $total += $driver->getScoreForRound($roundId);
+        }
+        return $total/2;
     }
 }

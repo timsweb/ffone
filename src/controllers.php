@@ -19,6 +19,11 @@ $app->get('/results', function() use ($app) {
     return $app['indexController']->results($app);
 })->bind('results');
 
+$app->get('/league', function() use ($app) {
+    return $app['indexController']->league($app);
+})->bind('league');
+
+
 $app->get('/rules', function() use ($app) {
     return $app['indexController']->rules($app);
 })->bind('rules');

@@ -1,0 +1,39 @@
+{% extends "base.twig" %}
+
+{% block title %}Leaderboard{% endblock %}
+
+{% block content %}
+    <!-- Main hero unit -->
+    <div class="hero-unit">
+    <h1>Leaderboard</h1>
+    <div class="tabbable tabs-left">
+      <ul class="nav nav-tabs">
+          {% for r in scores %}
+            <li{% if loop.first %} class="active"{% endif %}><a href="#roundresult{{ r.round.id }}" data-toggle="tab">{{ r.round.name }}</a></li>
+          {% endfor %}
+      </ul>
+      <div class="tab-content well">
+          {% for r in scores %}
+          <div class="tab-pane {% if loop.first %}active{% endif %}" id="roundresult{{ r.round.id }}">
+            <table class="table span6">
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Round Score</th>
+                    <th>Total Score</th>
+                </tr>
+                {% for s in r.scores %}
+                    <tr>
+                        <td>{{ loop.index}}</td>
+                        <td>{{ s.user.name }}
+                        <td>{{ s.roundScore }}</td>
+                        <td>{{ s.totalScore }}</td>
+                    </tr>
+                {% endfor%}
+            </table>
+          </div>
+          {% endfor %}
+      </div>
+    </div>
+    </div>
+{% endblock %}

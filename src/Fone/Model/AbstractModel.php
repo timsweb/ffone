@@ -36,7 +36,7 @@ abstract class AbstractModel
         return $this->_references[$name];
     }
 
-    public function __construct(array $modelData)
+    public function __construct(array $modelData = [])
     {
         foreach ($modelData as $key => $val) {
             $setFunction = 'set' . ucfirst($key);

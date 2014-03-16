@@ -4,3 +4,12 @@ betfair.productId = 82
 betfair.vendorId = 0
 betfair.locationId = 0
 betfair.ipaddress = 0
+
+; SMTP Settings. All disabled as the app is currently set to use sendmail.
+;smtp.host = localhost
+;smtp.port = 25
+;smtp.username =
+;smtp.password =
+;smtp.encryption =
+;smtp.auth_mode =
+smtp.from = noreply@yourdomain.com

@@ -115,7 +115,7 @@ $console->register('bet-getevent')
     });
 
 $console->register('update-costs')
-    ->setDescription('Test the API.')
+    ->setDescription('Load costs from the Betfair API.')
     ->setCode(function (InputInterface $input, OutputInterface $output) use ($app) {
         $db = $app['db']; /*@var $db \Doctrine\DBAL\Connection*/
         $api = $app['bfClient']; /*@var $api \Fone\Betting\Client*/
@@ -126,16 +126,16 @@ $console->register('update-costs')
         $output->writeln('DRIVERS');
         $output->writeln('=======');
 
-        foreach ($driverOdds as $driver => $odds) {
+       foreach ($driverOdds as $driver => $odds) {
             $driver = trim($driver);
             if ($db->fetchColumn('select 1 from drivers where name = ?', [$driver])) {
                 $cost = array_shift($driverCosts);
                 $db->update('drivers', ['cost' => $cost], ['name' => $driver]);
-                $output->writeln($driver . ' has cost ' . $cost);
+                $output->writeln($driver . ' (' . $odds .') has cost ' . $cost);
             } else {
                 $output->writeln('<error>' .$driver . ' not found</error>');
-            }
         }
+            }
 
         $teamOdds = $api->getCurrentTeamOdds();
         $output->writeln(PHP_EOL . 'TEAMS');
@@ -145,7 +145,7 @@ $console->register('update-costs')
             if ($db->fetchColumn('select 1 from teams where name = ?', [$t])) {
                 $cost = array_shift($teamCosts);
                 $db->update('teams', ['cost' => $cost], ['name' => $t]);
-                $output->writeln($t . ' has cost ' . $cost);
+                $output->writeln($t . ' (' . $p . ') has cost ' . $cost);
             } else {
                 $output->writeln('<error>' .$t . ' not found</error>');
             }
@@ -169,12 +169,68 @@ $console->register('load-data')
         fclose($teamsFile);
     });
 
+$console->register('import-results')
+        ->addArgument('to', InputOption::VALUE_OPTIONAL, 'email address to send notification of loaded results to.', null)
+        ->setDescription('Import the race results.')
+        ->setCode(function (InputInterface $input, OutputInterface $output) use ($app) {
+            $roundResultMapper = $app['roundResultMapper']; /*@var $roundResultMapper \Fone\Mapper\RoundResult*/
+            $roundMapper = $app['roundMapper']; /*@var $roundMapper \Fone\Mapper\Round*/
+            $lastRound = $roundMapper->getLastRound();
+            if (!$lastRound) {
+                $output->writeln('<info>The season has not started.</info>');
+                return;
+            } elseif ($lastRound->getId() === $roundResultMapper->getLastLoadedRoundId()) {
+                $output->writeln('<info>Last round results already loaded.</info>');
+                return;
+            }
+
+            $resultsXml = file_get_contents('http://ergast.com/api/f1/current/' . $lastRound->getId() . '/results.xml');
+            $xml = new SimpleXMLElement($resultsXml);
+            $xml->registerXPathNamespace('a', 'http://ergast.com/mrd/1.4');
+            $emailBody = '';
+            foreach ($xml->xpath('//a:Result') as $result) {
+                $grid = (int)$result->Grid;
+                $position = (int)$result['position'];
+                $driverCode = (string)$result->Driver['code'];
+                $fastestLap = ((string)$result->FastestLap['rank']) == '1';
+                $roundResult = new \Fone\Model\RoundResult();
+                $roundResult->setDriverCode($driverCode)
+                            ->setQualifyingPosition($grid)
+                            ->setRacePosition($position)
+                            ->setFastestLap($fastestLap)
+                            ->setRoundId($lastRound->getId());
+                $roundResultMapper->save($roundResult);
+                $line = sprintf('%s %d -> %d (%d): %d', $driverCode, $grid, $position, $fastestLap, $roundResult->getScore());
+                $emailBody .= $line .PHP_EOL;
+                $output->writeln($line);
+            }
+            if ($to = $input->getArgument('to')) {
+                $app->mail(\Swift_Message::newInstance()
+                    ->setSubject($lastRound->getName() . ' results are now live')
+                    ->setFrom(array($app['userConfig']['smtp']['from']))
+                    ->setTo(array($to))
+                    ->setBody($emailBody));
+                //manually flush the send email queue
+                if ($app['mailer.initialized']) {
+                  $app['swiftmailer.spooltransport']->getSpool()->flushQueue($app['swiftmailer.transport']);
+                }
+            }
+        }
+ );
+
 $console->register('test')
         ->setCode(function(InputInterface $input, OutputInterface $output) use ($app) {
-            $driverMapper = $app['driverMapper'];
-            $hamilton = $driverMapper->get('HAM');
-            $mercedes = $hamilton->getTeamModel();
-            $output->writeln('Team: ' . $mercedes->getName());
+            /*$app->mail(\Swift_Message::newInstance()
+                    ->setSubject('test email')
+                    ->setFrom(array($app['userConfig']['smtp']['from']))
+                    ->setTo(array('tim@wordery.com'))
+                    ->setBody('This is a test email.'));
+            if ($app['mailer.initialized']) {
+              $app['swiftmailer.spooltransport']->getSpool()->flushQueue($app['swiftmailer.transport']);
+            }*/
+            $userTeam = $app['userTeamMapper']->getTeamForRound(2,1);
+            $score = $userTeam->getScoreForRound(1);
+            die('<pre>' . print_r($score, true) . '</pre>');/** @todo DEBUGGING */
     });
 
 return $console;

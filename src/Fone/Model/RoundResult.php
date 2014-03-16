@@ -18,7 +18,6 @@ class RoundResult extends AbstractModel
         return $scores[$position - 1];
     }
 
-
     public function getRoundId()
     {
         return $this->_get('roundId');
@@ -74,7 +73,7 @@ class RoundResult extends AbstractModel
         return $this;
     }
 
-    public function getScore(&$breakdown)
+    public function getScore(&$breakdown = [])
     {
         if (!is_array($breakdown)) {
             $breakdown = [];

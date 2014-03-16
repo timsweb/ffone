@@ -90,7 +90,7 @@ class Client extends \Betfair\Client
         $totalPrices = [];
         foreach ($raceRunners as $id => $price) {
             $total = (isset($championshipPrices[$id]))? $championshipPrices[$id] : 0;
-            $total += $price * 3;
+            $total += $racePrices[$id] * 1.5;
             $totalPrices[$id] = $total;
         }
         $return = $this->_matchRunnersToPrices($raceRunners, $totalPrices);
@@ -114,11 +114,10 @@ class Client extends \Betfair\Client
         list ($nextRaceMarketId, $exchangeId) = $this->findMarketId($nextRaceEventId, 'Winning Car');
         $raceRunners = $this->getRunners($nextRaceMarketId, $exchangeId);
         $racePrices = $this->_normalisePrices($this->getRunnerPrices($nextRaceMarketId, $exchangeId));
-
         $totalPrices = [];
         foreach ($raceRunners as $id => $price) {
             $total = (isset($championshipPrices[$id]))? $championshipPrices[$id] : 0;
-            $total += $price * 3;
+            $total += $racePrices[$id] * 1.25;
             $totalPrices[$id] = $total;
         }
         $return = $this->_matchRunnersToPrices($raceRunners, $totalPrices);
@@ -136,12 +135,14 @@ class Client extends \Betfair\Client
             foreach ($lays as $l) {
                 if ($l[0]) {
                     $odds[] = $l[0];
+                    break;
                 }
             }
             if (empty($odds)) {
                 $odd = 1000;
             } else {
-                $odd = array_sum($odds) / count($odds);
+                $odd = $odds[0];
+                //$odd = array_sum($odds) / count($odds);
             }
             $data[$runnerId] = $odd;
         }

@@ -21,6 +21,11 @@ class Driver extends AbstractMapper
         return $this->_hydrateArray($rows);
     }
 
+    public function findAllByTeam($teamCode)
+    {
+        return $this->_hydrateArray($this->getDb()->fetchAll('select * from ' . $this->getTableName() . ' where team = ?', [$teamCode]));
+    }
+
     protected function _hydrate($row)
     {
         $model = parent::_hydrate($row); /*@var $model DriverModel*/
@@ -28,8 +33,8 @@ class Driver extends AbstractMapper
             $model->addReference('team', function($m) {
                 return $this->getApp()['teamMapper']->get($m->getTeam());
             });
+            $model->setRoundResultMapper($this->getApp()['roundResultMapper']);
         }
-
         return $model;
     }
 }

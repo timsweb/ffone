@@ -148,4 +148,16 @@ abstract class AbstractMapper
     {
         return array_map([$this, '_hydrate'], $rows);
     }
+
+    protected function fetchAll()
+    {
+        return $this->_hydrateArray($this->_db->fetchAll('select * from ' . $this->getTableName()));
+    }
+
+    public function find($sql, $params = [])
+    {
+        $query = 'select * from ' . $this->getTableName() . ' where ' . $sql;
+        $rows = $this->getDb()->fetchAll($query, $params);
+        return $this->_hydrateArray($rows);
+    }
 }

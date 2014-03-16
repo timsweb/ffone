@@ -7,6 +7,26 @@ namespace Fone\Model;
 class Driver extends AbstractModel
 {
 
+    protected $_roundResultMapper;
+
+    /**
+     * @return \Fone\Mapper\RoundResult
+     */
+    public function getRoundResultMapper()
+    {
+        return $this->_roundResultMapper;
+    }
+
+    /**
+     * @param \Fone\Mapper\RoundResult $roundResultMapper
+     * @return \Fone\Model\Driver
+     */
+    public function setRoundResultMapper($roundResultMapper)
+    {
+        $this->_roundResultMapper = $roundResultMapper;
+        return $this;
+    }
+
     public function getCode()
     {
         return $this->_get('code');
@@ -54,5 +74,14 @@ class Driver extends AbstractModel
     public function getTeamModel()
     {
         return $this->getReference('team');
+    }
+
+    public function getScoreForRound($roundId, &$breakdown = [])
+    {
+        $roundResult = $this->getRoundResultMapper()->get(['driverCode' => $this->getCode(), 'roundId' => $roundId]);
+        if (!$roundId) {
+            return 0;
+        }
+        return $roundResult->getScore($breakdown);
     }
 }

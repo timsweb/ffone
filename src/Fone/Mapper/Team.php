@@ -23,4 +23,14 @@ class Team extends AbstractMapper
         return $this->_hydrateArray($rows);
     }
 
+    protected function _hydrate($row)
+    {
+        $model = parent::_hydrate($row);
+        if ($model) {
+            $model->addReference('drivers', function ($teamModel) {
+                return $this->getApp()['driverMapper']->findAllByTeam($teamModel->getCode());
+            });
+        }
+        return $model;
+    }
 }
