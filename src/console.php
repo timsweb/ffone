@@ -229,6 +229,9 @@ $console->register('test')
               $app['swiftmailer.spooltransport']->getSpool()->flushQueue($app['swiftmailer.transport']);
             }*/
             $userTeam = $app['userTeamMapper']->getTeamForRound(2,1);
+            $breakDown = [];
+            $userTeam->getDriverAModel()->getScoreForRound(1, $breakDown);
+            die('<pre>' . print_r($breakDown, true) . '</pre>');/** @todo DEBUGGING */
             $score = $userTeam->getScoreForRound(1);
             die('<pre>' . print_r($score, true) . '</pre>');/** @todo DEBUGGING */
     });

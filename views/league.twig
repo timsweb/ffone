@@ -5,7 +5,7 @@
 {% block content %}
     <!-- Main hero unit -->
     <div class="hero-unit">
-    <h1>Leaderboard</h1>
+    <h1>Leaderboard - Unofficial may infact be completely incorect.</h1>
     <div class="tabbable tabs-left">
       <ul class="nav nav-tabs">
           {% for r in scores %}
@@ -25,7 +25,7 @@
                 {% for s in r.scores %}
                     <tr>
                         <td>{{ loop.index}}</td>
-                        <td>{{ s.user.name }}
+                        <td>{{ s.user.name|title }}
                         <td>{{ s.roundScore }}</td>
                         <td>{{ s.totalScore }}</td>
                     </tr>

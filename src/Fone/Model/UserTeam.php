@@ -110,9 +110,9 @@ class UserTeam extends AbstractModel
     public function getScoreForRound($roundId)
     {
         $total = $this->getDriverAModel()->getScoreForRound($roundId);
-        $total = $this->getDriverBModel()->getScoreForRound($roundId);
-        $total = $this->getTeamAModel()->getScoreForRound($roundId);
-        $total = $this->getTeamBModel()->getScoreForRound($roundId);
+        $total += $this->getDriverBModel()->getScoreForRound($roundId);
+        $total += $this->getTeamAModel()->getScoreForRound($roundId);
+        $total += $this->getTeamBModel()->getScoreForRound($roundId);
         return $total;
     }
 }
