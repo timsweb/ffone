@@ -31,7 +31,10 @@ class UserScoreCache extends AbstractMapper
                         $this->save($cacheModel);
                     }
                 }
-
+                usort($thisRoundScores, function ($a, $b) {
+                    if ($a->getTotalScore() ==  $b->getTotalScore()) return 0;
+                    return ($a->getTotalScore() < $b->getTotalScore()) ? 1 : -1;
+                });
             }
             $scores[$round->getId()] = ['round' => $round, 'scores' => $thisRoundScores];
         }
