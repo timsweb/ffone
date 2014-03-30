@@ -82,7 +82,7 @@ class RoundResult extends AbstractModel
         $breakdown['quali'] = self::getQualiScore($this->getQualifyingPosition());
         $breakdown['fastestLap'] = ($this->getFastestLap())? 10 : 0;
         $breakdown['positionsGained'] = ($this->getQualifyingPosition() - $this->getRacePosition() > 0)? $this->getQualifyingPosition() - $this->getRacePosition() : 0;
-        $breakdown['bonus'] = ($this->getQualifyingPosition() === 1 && $this->getRacePosition() === 1)? 15 : 0;
+        $breakdown['bonus'] = ($this->getQualifyingPosition() == 1 && $this->getRacePosition() == 1)? 15 : 0;
         $total = array_sum($breakdown);
         $breakdown['total'] = $total;
         return $total;
