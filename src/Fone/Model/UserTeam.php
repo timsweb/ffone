@@ -113,6 +113,9 @@ class UserTeam extends AbstractModel
         $total += $this->getDriverBModel()->getScoreForRound($roundId);
         $total += $this->getTeamAModel()->getScoreForRound($roundId);
         $total += $this->getTeamBModel()->getScoreForRound($roundId);
+        if ($roundId > 1 && $roundId == $this->getEffectiveFrom()) {
+            $total -= 25;
+        }
         return $total;
     }
 }

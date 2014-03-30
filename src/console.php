@@ -188,6 +188,7 @@ $console->register('import-results')
             $xml = new SimpleXMLElement($resultsXml);
             $xml->registerXPathNamespace('a', 'http://ergast.com/mrd/1.4');
             $emailBody = '';
+            $importedResults = 0;
             foreach ($xml->xpath('//a:Result') as $result) {
                 $grid = (int)$result->Grid;
                 $position = (int)$result['position'];
@@ -203,12 +204,13 @@ $console->register('import-results')
                 $line = sprintf('%s %d -> %d (%d): %d', $driverCode, $grid, $position, $fastestLap, $roundResult->getScore());
                 $emailBody .= $line .PHP_EOL;
                 $output->writeln($line);
+                $importedResults++;
             }
-            if ($to = $input->getArgument('to')) {
+            if ($importedResults && $to = $input->getArgument('to')) {
                 $app->mail(\Swift_Message::newInstance()
                     ->setSubject($lastRound->getName() . ' results are now live')
                     ->setFrom(array($app['userConfig']['smtp']['from']))
-                    ->setTo(array($to))
+                    ->setTo($to)
                     ->setBody($emailBody));
                 //manually flush the send email queue
                 if ($app['mailer.initialized']) {

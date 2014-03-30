@@ -114,7 +114,10 @@ class Index extends AbstractController
     public function results(Application $app)
     {
         //get all round result breakdown for the given user.
-        return "results";
+        $lastRound = $app['roundResultMapper']->getLastLoadedRoundId();
+        $scores = $app['userTeamMapper']->getScoreHistory($app->user()->getId(), $lastRound);
+        //die('<pre>' . print_r($scores, true) . '</pre>');/** @todo DEBUGGING */
+        return $app['twig']->render('results.twig', ['scores' => $scores]);
     }
 
     public function league(Application $app)

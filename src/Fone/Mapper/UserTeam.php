@@ -4,6 +4,12 @@ namespace Fone\Mapper;
 
 class UserTeam extends AbstractMapper
 {
+    /**
+     *
+     * @param int $userId
+     * @param int $roundId
+     * @return \Fone\Model\UserTeam
+     */
     public function getTeamForRound($userId, $roundId)
     {
         $row = $this->getDb()->fetchAssoc('select * from '
@@ -18,6 +24,40 @@ class UserTeam extends AbstractMapper
             . $this->getTableName()
             . ' where userId = ? order by effectiveFrom desc limit 1', [$userId]);
         return $this->_hydrate($row);
+    }
+
+    public function getScoreHistory($userId, $roundId)
+    {
+        $rounds = $this->getApp()['roundMapper']->find('id <= ? order by id asc', [$roundId]);
+        $scores = [];
+        foreach ($rounds as $round) {
+            $team = $this->getTeamForRound($userId, $round->getId());
+            $driverABreakdown = [];
+            $driverBBreakdown = [];
+            $teamADriverABreakdown = [];
+            $teamADriverBBreakdown = [];
+            $teamBDriverABreakdown = [];
+            $teamBDriverBBreakdown = [];
+            $team->getDriverAModel()->getScoreForRound($round->getId(), $driverABreakdown);
+            $team->getDriverBModel()->getScoreForRound($round->getId(), $driverBBreakdown);
+            list ($teamADriverA, $teamADriverB) = $team->getTeamAModel()->getDrivers();
+            list ($teamBDriverA, $teamBDriverB) = $team->getTeamBModel()->getDrivers();
+            $teamADriverA->getScoreForRound($round->getId(), $teamADriverABreakdown);
+            $teamADriverB->getScoreForRound($round->getId(), $teamADriverBBreakdown);
+            $teamBDriverA->getScoreForRound($round->getId(), $teamBDriverABreakdown);
+            $teamBDriverB->getScoreForRound($round->getId(), $teamBDriverBBreakdown);
+            $scores[] = [
+                'round' => $round,
+                'team' => $team,
+                'driverA' => $driverABreakdown,
+                'driverB' => $driverBBreakdown,
+                'teamADriverA' => $teamADriverABreakdown,
+                'teamADriverB' => $teamADriverBBreakdown,
+                'teamBDriverA' => $teamBDriverABreakdown,
+                'teamBDriverB' => $teamBDriverBBreakdown,
+            ];
+        }
+        return $scores;
     }
 
     protected function _hydrate($row)

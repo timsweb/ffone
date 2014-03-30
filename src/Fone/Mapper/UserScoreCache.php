@@ -19,7 +19,7 @@ class UserScoreCache extends AbstractMapper
                     $userTeam = $this->getApp()['userTeamMapper']->getTeamForRound($user->getId(), $round->getId());
                     if ($userTeam) {
                         $score = $userTeam->getScoreForRound($round->getId());
-                        $lastRoundTotal = (isset($scores[$round->getId() -1][$user->getId()]))? $scores[$round->getId() -1][$user->getId()]->getTotalScore() : 0;
+                        $lastRoundTotal = (isset($scores[$round->getId() -1]['scores'][$user->getId()]))? $scores[$round->getId() -1]['scores'][$user->getId()]->getTotalScore() : 0;
                         $cacheModel = $this->_hydrate([
                             'userId' => $user->getId(),
                             'roundId' => $round->getId(),
@@ -31,13 +31,16 @@ class UserScoreCache extends AbstractMapper
                         $this->save($cacheModel);
                     }
                 }
-                usort($thisRoundScores, function ($a, $b) {
-                    if ($a->getTotalScore() ==  $b->getTotalScore()) return 0;
-                    return ($a->getTotalScore() < $b->getTotalScore()) ? 1 : -1;
-                });
             }
             $scores[$round->getId()] = ['round' => $round, 'scores' => $thisRoundScores];
         }
+        foreach ($scores as &$scoreRow) {
+            usort($scoreRow['scores'], function ($a, $b) {
+                if ($a->getTotalScore() ==  $b->getTotalScore()) return 0;
+                return ($a->getTotalScore() < $b->getTotalScore()) ? 1 : -1;
+            });
+        }
+        unset($scoreRow);
         return $scores;
     }
 

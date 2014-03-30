@@ -84,4 +84,5 @@ class Driver extends AbstractModel
         }
         return $roundResult->getScore($breakdown);
     }
+
 }

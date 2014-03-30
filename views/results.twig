@@ -1,0 +1,93 @@
+{% extends "base.twig" %}
+
+{% block title %}Your Results{% endblock %}
+
+{% block content %}
+    <!-- Main hero unit -->
+    <div class="hero-unit">
+    <h1>Your Results</h1>
+    <div class="tabbable tabs-left">
+      <ul class="nav nav-tabs">
+          {% for r in scores %}
+            <li{% if loop.first %} class="active"{% endif %}><a href="#roundresult{{ r.round.id }}" data-toggle="tab">{{ r.round.name }}</a></li>
+          {% endfor %}
+      </ul>
+      <div class="tab-content well">
+          {% for r in scores %}
+          <div class="tab-pane {% if loop.first %}active{% endif %}" id="roundresult{{ r.round.id }}">
+            <table class="table span6">
+                <tr>
+                    <th>Driver</th>
+                    <th>Quali</th>
+                    <th>Race</th>
+                    <th>Fastest Lap</th>
+                    <th>Positions Gained</th>
+                    <th>Bonus Points</th>
+                    <th>Total</th>
+                </tr>
+                <tr>
+                    <td>{{ r.team.driverAModel.name }}</td>
+                    <td>{{ r.driverA.quali }}</td>
+                    <td>{{ r.driverA.race }}</td>
+                    <td>{{ r.driverA.fastestLap }}</td>
+                    <td>{{ r.driverA.positionsGained }}</td>
+                    <td>{{ r.driverA.bonus }}</td>
+                    <td>{{ r.driverA.total }}</td>
+                </tr>
+                <tr>
+                    <td>{{ r.team.driverBModel.name }}</td>
+                    <td>{{ r.driverB.quali }}</td>
+                    <td>{{ r.driverB.race }}</td>
+                    <td>{{ r.driverB.fastestLap }}</td>
+                    <td>{{ r.driverB.positionsGained }}</td>
+                    <td>{{ r.driverB.bonus }}</td>
+                    <td>{{ r.driverB.total }}</td>
+                </tr>
+                <tr>
+                    <td>{{ r.team.teamAModel.name }} - {{ r.team.teamAModel.drivers.0.name }}</td>
+                    <td>{{ r.teamADriverA.quali/2 }}</td>
+                    <td>{{ r.teamADriverA.race/2 }}</td>
+                    <td>{{ r.teamADriverA.fastestLap/2 }}</td>
+                    <td>{{ r.teamADriverA.positionsGained/2 }}</td>
+                    <td>{{ r.teamADriverA.bonus/2 }}</td>
+                    <td>{{ r.teamADriverA.total/2 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ r.team.teamAModel.name }} - {{ r.team.teamAModel.drivers.1.name }}</td>
+                    <td>{{ r.teamADriverB.quali/2 }}</td>
+                    <td>{{ r.teamADriverB.race/2 }}</td>
+                    <td>{{ r.teamADriverB.fastestLap/2 }}</td>
+                    <td>{{ r.teamADriverB.positionsGained/2 }}</td>
+                    <td>{{ r.teamADriverB.bonus/2 }}</td>
+                    <td>{{ r.teamADriverB.total/2 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ r.team.teamBModel.name }} - {{ r.team.teamBModel.drivers.0.name }}</td>
+                    <td>{{ r.teamBDriverA.quali /2 }}</td>
+                    <td>{{ r.teamBDriverA.race /2 }}</td>
+                    <td>{{ r.teamBDriverA.fastestLap /2 }}</td>
+                    <td>{{ r.teamBDriverA.positionsGained /2}}</td>
+                    <td>{{ r.teamBDriverA.bonus /2}}</td>
+                    <td>{{ r.teamBDriverA.total /2}}</td>
+                </tr>
+                <tr>
+                    <td>{{ r.team.teamBModel.name }} - {{ r.team.teamBModel.drivers.1.name }}</td>
+                    <td>{{ r.teamBDriverB.quali /2}}</td>
+                    <td>{{ r.teamBDriverB.race /2 }}</td>
+                    <td>{{ r.teamBDriverB.fastestLap /2 }}</td>
+                    <td>{{ r.teamBDriverB.positionsGained /2}}</td>
+                    <td>{{ r.teamBDriverB.bonus/2}}</td>
+                    <td>{{ r.teamBDriverB.total/2}}</td>
+                </tr>
+                {% if r.round.id == r.team.effectiveFrom and r.team.effectiveFrom > 1 %}
+                    <tr>
+                        <td colspan="7">Team Change: -25 points.</td>
+                    </tr>
+                {% endif %}
+            </table>
+          </div>
+          {% endfor %}
+      </div>
+    </div>
+    </div>
+{% endblock %}

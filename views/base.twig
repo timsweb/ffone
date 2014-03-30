@@ -75,7 +75,7 @@
             <ul class="nav">
               {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 <li{% if app.request.get('_route') == 'league' %} class='active'{% endif %}><a href="{{ path('league') }}">League</a></li>
-                <li{% if app.request.get('_route') == 'results' %} class='active'{% endif %}><a href="">Results</a></li>
+                <li{% if app.request.get('_route') == 'results' %} class='active'{% endif %}><a href="{{ path('results') }}">Results</a></li>
                 <li{% if app.request.get('_route') == 'rules' %} class='active'{% endif %}><a href="{{ path('rules') }}">Rules</a></li>
               {% endif %}
             </ul>
