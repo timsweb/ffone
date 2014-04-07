@@ -116,7 +116,7 @@ class Index extends AbstractController
         //get all round result breakdown for the given user.
         $lastRound = $app['roundResultMapper']->getLastLoadedRoundId();
         $scores = $app['userTeamMapper']->getScoreHistory($app->user()->getId(), $lastRound);
-        //die('<pre>' . print_r($scores, true) . '</pre>');/** @todo DEBUGGING */
+        $scores = array_reverse($scores, true);
         return $app['twig']->render('results.twig', ['scores' => $scores]);
     }
 
@@ -124,6 +124,7 @@ class Index extends AbstractController
     {
         $lastRound = $app['roundResultMapper']->getLastLoadedRoundId();
         $scores = $app['userScoreCacheMapper']->getScores($lastRound);
+        $scores = array_reverse($scores, true);
         return $app['twig']->render('league.twig', [
             'scores' => $scores
 	]);
