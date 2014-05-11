@@ -14,7 +14,7 @@ class UserTeam extends AbstractMapper
     {
         $row = $this->getDb()->fetchAssoc('select * from '
             . $this->getTableName()
-            . ' where userId = ? and effectiveFrom <= ? order by effectiveFrom asc limit 1', [$userId, $roundId]);
+            . ' where userId = ? and effectiveFrom <= ? order by effectiveFrom desc limit 1', [$userId, $roundId]);
         return $this->_hydrate($row);
     }
 
